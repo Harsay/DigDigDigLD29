@@ -1,27 +1,28 @@
 package com.harsay.ludumdare29;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.harsay.ludumdare29.assets.Graphic;
+import com.harsay.ludumdare29.assets.Sound;
+import com.harsay.ludumdare29.other.Controller;
 
-public class MyGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+/*
+ * Hello.
+ * I made this game for Ludum Dare 29 in 48 hours!
+ * ...
+ * 
+ */
+
+public class MyGame extends Game {
 	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-	}
+	public static Controller controller = new Controller();
+	public static Sound sound = new Sound();
+	public static Graphic graphic = new Graphic();
 
 	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+	public void create() {
+		Gdx.input.setInputProcessor(controller);
+		
 	}
+	
 }
