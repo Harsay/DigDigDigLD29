@@ -53,11 +53,11 @@ public class Level {
 		int tileX = Controller.mouseTileX;
 		int tileY = Controller.mouseTileY;
 		
-		if(Player.reachableTiles.contains(new Vector2(tileX, tileY))) {
+		if(/*Player.reachableTiles.contains(new Vector2(tileX, tileY))*/ getTile(tileX, tileY).equals(Tile.ROCK)) {
 			Tile toRemove = map.get(tileX).get(tileY);
 			if(!toRemove.equals(Tile.NOTHING)) map.get(tileX).set(tileY, Tile.NOTHING);
-		} else if(getTile(tileX, tileY).equals(Tile.NOTHING)) {
-			if(Player.tileY <= tileY) {
+		} else if(getTile(tileX, tileY).equals(Tile.NOTHING) && getTile(tileX, tileY-1).equals(Tile.NOTHING)) {
+			if(Player.tileY < tileY) {
 				if(Player.tileX > tileX) Player.walkLeft = true;
 				else Player.walkRight = true;
 				Player.reachTileX = tileX;

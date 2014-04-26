@@ -34,17 +34,18 @@ public class Player extends Entity {
 		if(isWalking) {
 			if(walkRight) velocity.x += speed*delta;
 			else if(walkLeft) velocity.x -= speed*delta;
-			if(tileX == reachTileX) {
+			if(walkRight && position.x >= reachTileX*MyGame.UNIT) {
 				isWalking = false;
-				walkLeft = false;
 				walkRight = false;
 				velocity.x = 0;
 				position.x = reachTileX*MyGame.UNIT;
+			} else if(walkLeft && position.x <= reachTileX*MyGame.UNIT) {
+				isWalking = false;
+				walkLeft = false;
+				velocity.x = 0;
 			}
 		}
-		
-		
-		
+				
 		position.y += velocity.y;
 		position.x += velocity.x;
 		
