@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector3;
 import com.harsay.ludumdare29.MyGame;
 import com.harsay.ludumdare29.other.Controller;
 
@@ -44,10 +43,9 @@ public class World {
 			ent.render(sb);
 		}
 		sb.end();
-		Vector3 mousePos = new Vector3(Controller.mouseX, Controller.mouseY, 0);
-		cam.unproject(mousePos);
+		sr.setProjectionMatrix(cam.combined); // <--- That took me over 3 hours to figure out that I forgot to use it.
 		sr.begin(ShapeType.Line);
-		sr.rect(Controller.mouseTileX*MyGame.UNIT, MyGame.HEIGHT - Controller.mouseTileY*MyGame.UNIT - MyGame.UNIT, MyGame.UNIT, MyGame.UNIT);
+		Controller.drawCursor(sr);
 		sr.end();
 	}
 	

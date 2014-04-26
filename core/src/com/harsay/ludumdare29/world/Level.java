@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.harsay.ludumdare29.MyGame;
 import com.harsay.ludumdare29.assets.Graphic;
+import com.harsay.ludumdare29.other.Controller;
 
 public class Level {
 	
@@ -23,8 +27,8 @@ public class Level {
 	public void generate() {
 		for(int x=0; x<=30; x++) {
 			ArrayList<Tile> list = new ArrayList<Tile>();
-			for(int y=0; y<=16; y++) {
-				if(y > 3) 
+			for(int y=0; y<=32; y++) {
+				if(y > 10) 
 					list.add(Tile.ROCK);
 				else
 					list.add(Tile.NOTHING);
@@ -45,6 +49,21 @@ public class Level {
 				// TODO: moar tiles
 			}
 		}
+	}
+	
+	public void removeTile() {
+		int tileX = Controller.mouseTileX;
+		int tileY = Controller.mouseTileY;
+		Tile toRemove = map.get(tileX).get(tileY);
+		if(!toRemove.equals(Tile.NOTHING)) map.get(tileX).set(tileY, Tile.NOTHING);
+	}
+	
+	public int getWidth() {
+		return map.size()*MyGame.UNIT;
+	}
+	
+	public int getHeight() {
+		return map.get(0).size()*MyGame.UNIT;
 	}
 
 }

@@ -10,7 +10,7 @@ public class BasicScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		GL20 gl = Gdx.graphics.getGL20();
-		gl.glClearColor(0, 0, 0, 0);
+		gl.glClearColor(0, 0.5f, 1, 0);
 	    gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	    
 		World.update(delta);

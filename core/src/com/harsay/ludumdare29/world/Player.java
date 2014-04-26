@@ -7,12 +7,11 @@ import com.harsay.ludumdare29.assets.Graphic;
 public class Player extends Entity {
 
 	public Player() {
-		super(13*MyGame.UNIT, MyGame.UNIT, 3*MyGame.UNIT, 3*MyGame.UNIT);
+		super(14*MyGame.UNIT, 9*MyGame.UNIT, (int) Graphic.player.getWidth()/MyGame.UNIT, (int) Graphic.player.getHeight()/MyGame.UNIT);
 	}
 	
 	public void update(float delta) {
 		super.update(delta);
-		
 		
 	}
 	
