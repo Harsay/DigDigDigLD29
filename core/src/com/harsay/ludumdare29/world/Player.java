@@ -10,6 +10,12 @@ public class Player extends Entity {
 		super(13*MyGame.UNIT, MyGame.UNIT, 3*MyGame.UNIT, 3*MyGame.UNIT);
 	}
 	
+	public void update(float delta) {
+		super.update(delta);
+		
+		
+	}
+	
 	public void render(SpriteBatch sb) {
 		Graphic.player.setPosition(position.x, position.y);
 		Graphic.player.draw(sb);

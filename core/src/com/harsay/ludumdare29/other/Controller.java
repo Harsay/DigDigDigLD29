@@ -1,56 +1,22 @@
 package com.harsay.ludumdare29.other;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.InputAdapter;
+import com.harsay.ludumdare29.MyGame;
 
-public class Controller implements InputProcessor {
+public class Controller extends InputAdapter {
 	
-	public static boolean isLeftPressed = false;
-	
-	public void checkInput() {
-		isLeftPressed = Gdx.input.isKeyPressed(Keys.LEFT);	
-	}
+	public static int mouseTileX;
+	public static int mouseTileY;
+	public static float mouseX;
+	public static float mouseY;
 
-	@Override
-	public boolean keyDown(int keycode) {
-		checkInput();
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		checkInput();
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
-	}
-
-	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
+		mouseX = ( (float) MyGame.WIDTH / (float) Gdx.graphics.getWidth() )*screenX;
+		mouseY = ( (float) MyGame.HEIGHT / (float) Gdx.graphics.getHeight() )*screenY;
+		mouseTileX = (int) Math.floor(mouseX/MyGame.UNIT);
+		mouseTileY = (int) Math.floor(mouseY/MyGame.UNIT);
+		System.out.println(mouseTileY);
 		return false;
 	}
 
