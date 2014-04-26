@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.harsay.ludumdare29.MyGame;
 import com.harsay.ludumdare29.assets.Graphic;
 import com.harsay.ludumdare29.other.Controller;
@@ -54,8 +52,15 @@ public class Level {
 	public void removeTile() {
 		int tileX = Controller.mouseTileX;
 		int tileY = Controller.mouseTileY;
-		Tile toRemove = map.get(tileX).get(tileY);
-		if(!toRemove.equals(Tile.NOTHING)) map.get(tileX).set(tileY, Tile.NOTHING);
+		
+		if(Player.reachableTiles.contains(new Vector2(tileX, tileY))) {
+			Tile toRemove = map.get(tileX).get(tileY);
+			if(!toRemove.equals(Tile.NOTHING)) map.get(tileX).set(tileY, Tile.NOTHING);
+		}	
+	}
+	
+	public Tile getTile(int x, int y) {
+		return map.get(x).get(y);
 	}
 	
 	public int getWidth() {

@@ -21,7 +21,6 @@ public class World {
 	public static Level level = new Level();
 	
 	public World() {
-		cam.position.set(MyGame.WIDTH / 2, MyGame.HEIGHT / 2, 0);
 		cam.setToOrtho(true, MyGame.WIDTH, MyGame.HEIGHT);
 		level.generate();
 	}

@@ -1,17 +1,68 @@
 package com.harsay.ludumdare29.world;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.harsay.ludumdare29.MyGame;
 import com.harsay.ludumdare29.assets.Graphic;
+import com.harsay.ludumdare29.world.Level.Tile;
 
 public class Player extends Entity {
+	
+	public static List<Vector2> reachableTiles = new ArrayList<Vector2>();
 
 	public Player() {
-		super(14*MyGame.UNIT, 9*MyGame.UNIT, (int) Graphic.player.getWidth()/MyGame.UNIT, (int) Graphic.player.getHeight()/MyGame.UNIT);
+		super(15*MyGame.UNIT, 9*MyGame.UNIT, (int) Graphic.player.getWidth()/MyGame.UNIT, (int) Graphic.player.getHeight()/MyGame.UNIT);
 	}
 	
 	public void update(float delta) {
 		super.update(delta);
+		
+		if(World.level.getTile(tileX, tileY+height).equals(Tile.NOTHING)) {
+			velocity.y += speed*delta;
+		} else {
+			velocity.y = 0;
+		}
+		
+		position.y += velocity.y;
+		position.x += velocity.x;
+		
+		setReachableTiles();
+		
+		World.cam.position.lerp(position, 0.05f);
+	}
+	
+	public void setReachableTiles() {
+		/*
+		 * tileY+height
+		 * tileY-1
+		 * tileX+1
+		 * tileX-1
+		 * tileX+1 tileY+1
+		 * tileX-1 tileY+1
+		 */
+		
+		reachableTiles.clear();
+		Level lvl = World.level;
+		
+		if(lvl.getTile(tileX, tileY+height).equals(Tile.ROCK)) reachableTiles.add(new Vector2(tileX, tileY+height));
+		if(lvl.getTile(tileX, tileY-1).equals(Tile.ROCK)) reachableTiles.add(new Vector2(tileX, tileY-1));
+		
+		if(lvl.getTile(tileX+1, tileY).equals(Tile.ROCK)) reachableTiles.add(new Vector2(tileX+1, tileY));
+		else if(lvl.getTile(tileX+1, tileY-1).equals(Tile.ROCK)) reachableTiles.add(new Vector2(tileX+1, tileY-1));
+		
+		if(lvl.getTile(tileX-1, tileY).equals(Tile.ROCK)) reachableTiles.add(new Vector2(tileX-1, tileY));
+		else if(lvl.getTile(tileX-1, tileY-1).equals(Tile.ROCK)) reachableTiles.add(new Vector2(tileX-1, tileY-1));
+		
+		if(lvl.getTile(tileX+1, tileY+1).equals(Tile.ROCK)) reachableTiles.add(new Vector2(tileX+1, tileY+1));
+		else if(lvl.getTile(tileX+1, tileY+2).equals(Tile.ROCK)) reachableTiles.add(new Vector2(tileX+1, tileY+2));
+		
+		if(lvl.getTile(tileX-1, tileY+1).equals(Tile.ROCK)) reachableTiles.add(new Vector2(tileX-1, tileY+1));
+		else if(lvl.getTile(tileX-1, tileY+2).equals(Tile.ROCK)) reachableTiles.add(new Vector2(tileX-1, tileY+2));
+		
+		System.out.println(reachableTiles.size());
 		
 	}
 	

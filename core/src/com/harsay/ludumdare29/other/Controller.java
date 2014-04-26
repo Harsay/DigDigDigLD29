@@ -1,11 +1,13 @@
 package com.harsay.ludumdare29.other;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.harsay.ludumdare29.MyGame;
+import com.harsay.ludumdare29.world.Player;
 import com.harsay.ludumdare29.world.World;
 
 public class Controller extends InputAdapter {
@@ -47,6 +49,11 @@ public class Controller extends InputAdapter {
 	}
 	
 	public static void drawCursor(ShapeRenderer sr) {
-		sr.rect(Controller.mouseTileX*MyGame.UNIT, Controller.mouseTileY*MyGame.UNIT, MyGame.UNIT, MyGame.UNIT);
+		if(Player.reachableTiles.contains(new Vector2(mouseTileX, mouseTileY))) {
+			sr.setColor(Color.GREEN);
+		} else {
+			sr.setColor(Color.RED);
+		}
+		sr.rect(mouseTileX*MyGame.UNIT, mouseTileY*MyGame.UNIT, MyGame.UNIT, MyGame.UNIT);
 	}
 }
