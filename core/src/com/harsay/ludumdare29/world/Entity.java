@@ -7,12 +7,12 @@ import com.harsay.ludumdare29.MyGame;
 
 public class Entity {
 	
-	public Vector3 position;
+	public static Vector3 position;
 	
 	public int width;
 	public int height;
-	public int tileX;
-	public int tileY;
+	public static int tileX;
+	public static int tileY;
 	
 	public Vector2 velocity = new Vector2(0,0);
 	public float maxVelocity;
@@ -25,8 +25,8 @@ public class Entity {
 	}
 	
 	public void update(float delta) {
-		tileX = (int) Math.floor(position.x/MyGame.UNIT);
-		tileY = (int) Math.floor(position.y/MyGame.UNIT);
+		tileX = (int) (position.x/MyGame.UNIT);
+		tileY = (int) (position.y/MyGame.UNIT);
 		//System.out.println(tileX+","+tileY);
 		
 	}

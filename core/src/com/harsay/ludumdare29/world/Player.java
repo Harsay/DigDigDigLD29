@@ -12,6 +12,11 @@ import com.harsay.ludumdare29.world.Level.Tile;
 public class Player extends Entity {
 	
 	public static List<Vector2> reachableTiles = new ArrayList<Vector2>();
+	
+	public static boolean walkRight = false;
+	public static boolean walkLeft = false;
+	public static boolean isWalking = false;
+	public static int reachTileX = 0;
 
 	public Player() {
 		super(15*MyGame.UNIT, 9*MyGame.UNIT, (int) Graphic.player.getWidth()/MyGame.UNIT, (int) Graphic.player.getHeight()/MyGame.UNIT);
@@ -26,12 +31,30 @@ public class Player extends Entity {
 			velocity.y = 0;
 		}
 		
+		if(isWalking) {
+			if(walkRight) velocity.x += speed*delta;
+			else if(walkLeft) velocity.x -= speed*delta;
+			if(tileX == reachTileX) {
+				isWalking = false;
+				walkLeft = false;
+				walkRight = false;
+				velocity.x = 0;
+				position.x = reachTileX*MyGame.UNIT;
+			}
+		}
+		
+		
+		
 		position.y += velocity.y;
 		position.x += velocity.x;
 		
 		setReachableTiles();
 		
 		World.cam.position.lerp(position, 0.05f);
+	}
+	
+	public static boolean canWalkTo(int toWalkX, int toWalkY) {
+		return false;
 	}
 	
 	public void setReachableTiles() {

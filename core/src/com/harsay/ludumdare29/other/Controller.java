@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.harsay.ludumdare29.MyGame;
+import com.harsay.ludumdare29.world.Level.Tile;
 import com.harsay.ludumdare29.world.Player;
 import com.harsay.ludumdare29.world.World;
 
@@ -24,7 +25,7 @@ public class Controller extends InputAdapter {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		calculateCoordinates(screenX, screenY);
 		if(button == Input.Buttons.LEFT) {
-			World.level.removeTile();
+			World.level.checkTile();
 			return true;
 		} else {
 			World.cam.position.y += MyGame.UNIT;
@@ -45,12 +46,13 @@ public class Controller extends InputAdapter {
 		
 		mouseTileX = (int) Math.floor(mousePosition.x/MyGame.UNIT);
 		mouseTileY = (int) Math.floor(mousePosition.y/MyGame.UNIT);
-		
 	}
 	
 	public static void drawCursor(ShapeRenderer sr) {
 		if(Player.reachableTiles.contains(new Vector2(mouseTileX, mouseTileY))) {
 			sr.setColor(Color.GREEN);
+		} else if(World.level.getTile(mouseTileX, mouseTileY).equals(Tile.NOTHING) && Player.tileY <= mouseTileY && Player.tileX != mouseTileX) {
+			sr.setColor(Color.YELLOW);
 		} else {
 			sr.setColor(Color.RED);
 		}

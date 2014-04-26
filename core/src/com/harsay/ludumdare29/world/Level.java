@@ -49,14 +49,21 @@ public class Level {
 		}
 	}
 	
-	public void removeTile() {
+	public void checkTile() {
 		int tileX = Controller.mouseTileX;
 		int tileY = Controller.mouseTileY;
 		
 		if(Player.reachableTiles.contains(new Vector2(tileX, tileY))) {
 			Tile toRemove = map.get(tileX).get(tileY);
 			if(!toRemove.equals(Tile.NOTHING)) map.get(tileX).set(tileY, Tile.NOTHING);
-		}	
+		} else if(getTile(tileX, tileY).equals(Tile.NOTHING)) {
+			if(Player.tileY <= tileY) {
+				if(Player.tileX > tileX) Player.walkLeft = true;
+				else Player.walkRight = true;
+				Player.reachTileX = tileX;
+				Player.isWalking = true;
+			}
+		}
 	}
 	
 	public Tile getTile(int x, int y) {
