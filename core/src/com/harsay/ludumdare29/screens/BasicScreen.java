@@ -1,13 +1,20 @@
 package com.harsay.ludumdare29.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.harsay.ludumdare29.world.World;
 
 public class BasicScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
-		
+		GL20 gl = Gdx.graphics.getGL20();
+		gl.glClearColor(0, 0, 0, 0);
+	    gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	    
+		World.update(delta);
+		World.render();
 	}
 
 	@Override
