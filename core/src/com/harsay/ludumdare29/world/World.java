@@ -47,4 +47,8 @@ public class World {
 		
 	}
 	
+	public static void add(Entity ent) {
+		entities.add(ent);
+	}
+	
 }
