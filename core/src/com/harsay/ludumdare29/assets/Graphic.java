@@ -1,6 +1,9 @@
 package com.harsay.ludumdare29.assets;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Graphic {
@@ -11,6 +14,8 @@ public class Graphic {
 	public static Sprite lava;
 	public static Sprite lavaRock;
 	public static Sprite ind;
+	
+	public static BitmapFont font;
 	
 	public void init() {
 		tile = new Sprite(new Texture("tile.jpg"));
@@ -26,6 +31,10 @@ public class Graphic {
 		lava.flip(false, true);
 		lavaRock.flip(false, true);
 		ind.flip(false, true);
+		
+		font = new BitmapFont(Gdx.files.internal("font.fnt"));
+		font.setColor(1, 1, 1, 1);
+		font.setScale(0.5f, -0.5f); // FLIP DA FONT!
 	}
 
 }

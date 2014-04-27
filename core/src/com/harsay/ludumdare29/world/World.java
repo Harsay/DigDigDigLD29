@@ -7,33 +7,39 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.harsay.ludumdare29.MyGame;
+import com.harsay.ludumdare29.assets.Graphic;
 
 public class World {
 	
-	public static SpriteBatch sb = new SpriteBatch();
-	public static ShapeRenderer sr = new ShapeRenderer();
-	public static List<Entity> entities = new ArrayList<Entity>();
+	public SpriteBatch sb = new SpriteBatch();
+	public ShapeRenderer sr = new ShapeRenderer();
+	public List<Entity> entities = new ArrayList<Entity>();
 	
-	public static OrthographicCamera cam = new OrthographicCamera(MyGame.WIDTH, MyGame.HEIGHT);
+	public OrthographicCamera cam = new OrthographicCamera(MyGame.WIDTH, MyGame.HEIGHT);
 	
-	public static Level level = new Level();
+	public Level level = new Level();
 	
-	public static Random random = new Random();
+	public Random random = new Random();
 	
-	public static int shakeCounter = 0;
-	public static float shakeDuration = 0;
-	public static float shakePower = 0;
-	public static float shakeMaximumDuration = 300;
-	public static boolean isShaking = false;
+	public float shakeDuration = 0;
+	public float shakePower = 0;
+	public float shakeMaximumDuration = 300;
+	public boolean isShaking = false;
 	
-	public World() {
+	MyGame game;
+	
+	public World(MyGame game) {
+		this.game = game;
+		add(game.player);
+		System.out.println("l");
 		cam.setToOrtho(true, MyGame.WIDTH, MyGame.HEIGHT);
 		cam.zoom = 0.7f;
 		level.generate();
 	}
 	
-	public static void update(float delta) {
+	public void update(float delta) {
 		if(isShaking) {
 			if(shakeDuration <= shakeMaximumDuration) {
 				cam.translate(random.nextInt(11) - 5, random.nextInt(11) - 5);
@@ -49,7 +55,7 @@ public class World {
 		}
 	}
 	
-	public static void render() {
+	public void render() {
 
 		cam.update();
 		sb.begin();
@@ -59,22 +65,19 @@ public class World {
 			Entity ent = entities.get(i);
 			ent.render(sb);
 		}
+		Vector3 pos = new Vector3(0, 32, 0);
+		cam.unproject(pos);
+		Graphic.font.draw(sb, "Score: 0", pos.x, pos.y);
 		sb.end();
 
 	}
 	
-	public static void shake(float dur) {
-		shakeCounter = 0;
+	public void shake(float dur) {
 		shakeMaximumDuration = dur;
 		isShaking = true;
 	}
 	
-	public static void clear() {
-		
-	}
-	
-	public static void add(Entity ent) {
+	public void add(Entity ent) {
 		entities.add(ent);
 	}
-	
 }

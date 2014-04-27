@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.harsay.ludumdare29.assets.Graphic;
 import com.harsay.ludumdare29.assets.Sound;
 import com.harsay.ludumdare29.other.Controller;
+import com.harsay.ludumdare29.screens.BasicScreen;
 import com.harsay.ludumdare29.screens.GameScreen;
+import com.harsay.ludumdare29.world.Player;
 import com.harsay.ludumdare29.world.World;
 
 /*
@@ -25,16 +27,18 @@ public class MyGame extends Game {
 	public static Sound sound = new Sound();
 	public static Graphic graphic = new Graphic();
 	
-	public static World world;
+	public Player player;
+	
+	public World world;
 
 	@Override
 	public void create() {
 		Gdx.input.setInputProcessor(controller);
 		sound.init();
 		graphic.init();
-		world = new World();
+		player = new Player(this);
+		world = new World(this);
 		
-		setScreen(new GameScreen());
+		setScreen(new GameScreen(this));
 	}
-	
 }

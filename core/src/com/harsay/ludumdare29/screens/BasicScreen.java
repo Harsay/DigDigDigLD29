@@ -3,9 +3,16 @@ package com.harsay.ludumdare29.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.harsay.ludumdare29.MyGame;
 import com.harsay.ludumdare29.world.World;
 
 public class BasicScreen implements Screen {
+	
+	MyGame game;
+	
+	public BasicScreen(MyGame game) {
+		this.game = game;
+	}
 
 	@Override
 	public void render(float delta) {
@@ -13,8 +20,8 @@ public class BasicScreen implements Screen {
 		gl.glClearColor(0, 0.5f, 1, 0);
 	    gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	    
-		World.update(delta);
-		World.render();
+		game.world.update(delta);
+		game.world.render();
 	}
 
 	@Override

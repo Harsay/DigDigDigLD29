@@ -107,7 +107,6 @@ public class Level {
 			for(int x=lavaBeginX; x<=lavaEndX; x++) {
 				for(int y=lavaBeginY; y<=lavaEndY; y++) {
 					if(!getTile(x, y).equals(Tile.INDESTRUCTIBLE)) map.get(x).set(y, Tile.LAVA);
-					System.out.println("MADE LAVA at ("+lavaBeginY+")");
 				}
 			}
 			
@@ -152,9 +151,6 @@ public class Level {
 		}
 	}
 	
-	public void checkTile() {
-
-	}
 	
 	public void removeTile(int x, int y) {
 		map.get(x).set(y, Tile.BACKGROUND);
