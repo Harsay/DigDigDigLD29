@@ -12,7 +12,7 @@ import com.harsay.ludumdare29.assets.Graphic;
 public class Level {
 	
 	public static enum Tile {
-		NOTHING, ROCK, BACKGROUND, LAVA
+		NOTHING, ROCK, BACKGROUND, LAVA, LAVAROCK, INDESTRUCTIBLE
 	}
 	
 	public Random random = new Random();
@@ -20,6 +20,8 @@ public class Level {
 	public List<ArrayList<Tile>> map = new ArrayList<ArrayList<Tile>>();
 	
 	public int tileNumY = 0;
+	public int fixNumY = 12;
+	public int lavaToGenerate = 10;
 	
 	public Level() {
 		
@@ -39,25 +41,14 @@ public class Level {
 		
 		tileNumY += 100;
 		
-		for(int i=0; i<=40; i++) {
-			int lavaBeginX = random.nextInt(70) + 1;
-			int lavaBeginY = random.nextInt(85) + 14;
-			int lavaEndX = lavaBeginX + random.nextInt(15) + 1;
-			int lavaEndY = lavaBeginY + random.nextInt(5) + 1;
-			
-			for(int x=lavaBeginX; x<=lavaEndX; x++) {
-				for(int y=lavaBeginY; y<=lavaEndY; y++) {
-					map.get(x).set(y, Tile.LAVA);
-					System.out.println("MADE LAVA at ("+lavaBeginY+")");
-				}
-			}
-		}
-		
-		
 		Collections.reverse(map);
+		
+		generateLava();
+		
 	}
 	
 	public void expand() {
+		fixNumY = 0;
 		for(int x=0; x<=90; x++) {
 			ArrayList<Tile> list = map.get(x);
 			for(int y=0; y<=100; y++) {
@@ -65,6 +56,37 @@ public class Level {
 			}
 		}
 		tileNumY += 100;
+		lavaToGenerate += 5;
+		
+		generateLava();
+	}
+	
+	public void generateLava() {
+		// LAVA GENERATION
+		
+		for(int i=0; i<=lavaToGenerate + random.nextInt((int)Math.floor(lavaToGenerate/2)); i++) { // SHOULD DEPEND OF DIFFICULTY + random
+			int lavaBeginX = random.nextInt(75);
+			int lavaBeginY = (tileNumY-100) + random.nextInt(78) + fixNumY;
+			int lavaEndX = lavaBeginX + random.nextInt(15) + 1;
+			int lavaEndY = lavaBeginY + random.nextInt(10) + 1;
+			
+			for(int x=lavaBeginX; x<=lavaEndX; x++) {
+				for(int y=lavaBeginY; y<=lavaEndY; y++) {
+					map.get(x).set(y, Tile.LAVA);
+					System.out.println("MADE LAVA at ("+lavaBeginY+")");
+				}
+			}
+			
+			for(int x=lavaBeginX-1; x<=lavaEndX+1; x++) {
+				for(int y=lavaBeginY-1; y<=lavaEndY+1; y++) {
+					if( Math.random() < 0.99f &&
+							x >= 0 && x <= 90 &&
+								y >= (tileNumY-100)+fixNumY && y <= tileNumY &&
+								!getTile(x, y).equals(Tile.LAVA)) 
+						map.get(x).set(y, Tile.LAVAROCK);
+				}
+			}
+		}
 	}
 	
 	public void render(SpriteBatch sb) {
@@ -78,6 +100,10 @@ public class Level {
 				else if(t.equals(Tile.LAVA))  {
 					Graphic.lava.setPosition(x*MyGame.UNIT, y*MyGame.UNIT);
 					Graphic.lava.draw(sb);
+				}
+				else if(t.equals(Tile.LAVAROCK))  {
+					Graphic.lavaRock.setPosition(x*MyGame.UNIT, y*MyGame.UNIT);
+					Graphic.lavaRock.draw(sb);
 				}
 				else if(t.equals(Tile.BACKGROUND))  {
 					Graphic.darkerTile.setPosition(x*MyGame.UNIT, y*MyGame.UNIT);

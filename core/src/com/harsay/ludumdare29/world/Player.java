@@ -32,14 +32,18 @@ public class Player extends Entity {
 		if(!Controller.isUpPressed) canPressUp = true;
 		
 		if(Controller.isDownPressed && canPressDown) {
-			World.level.removeTile(tileX, tileY+1);
-			position.y = (tileY+1)*MyGame.UNIT;
-			position.x = (tileX)*MyGame.UNIT;
-			canPressDown = false;
-			World.shake(0.2f);
+			if(World.level.getTile(tileX, tileY+1).equals(Tile.ROCK) ||
+					World.level.getTile(tileX, tileY+1).equals(Tile.LAVAROCK)) {
+				World.level.removeTile(tileX, tileY+1);
+				position.y = (tileY+1)*MyGame.UNIT;
+				position.x = (tileX)*MyGame.UNIT;
+				canPressDown = false;
+				World.shake(0.2f);
+			}
 		}
 		else if(Controller.isLeftPressed && canPressLeft) {
-			if(!World.level.getTile(tileX-1, tileY).equals(Tile.NOTHING)) {
+			if(World.level.getTile(tileX-1, tileY).equals(Tile.ROCK) ||
+					World.level.getTile(tileX-1, tileY).equals(Tile.LAVAROCK)) {
 				World.level.removeTile(tileX-1, tileY);
 				World.shake(0.2f);
 			}
@@ -48,7 +52,8 @@ public class Player extends Entity {
 			canPressLeft = false;
 		}
 		else if(Controller.isRightPressed && canPressRight) {
-			if(!World.level.getTile(tileX+1, tileY).equals(Tile.NOTHING)) {
+			if(World.level.getTile(tileX+1, tileY).equals(Tile.ROCK) ||
+					World.level.getTile(tileX+1, tileY).equals(Tile.LAVAROCK)) {
 				World.level.removeTile(tileX+1, tileY);
 				World.shake(0.2f);
 			}
@@ -57,16 +62,19 @@ public class Player extends Entity {
 			canPressRight = false;
 		} 
 		else if(Controller.isUpPressed && canPressUp) {
-			World.level.removeTile(tileX, tileY-1);
-			World.shake(0.2f);
-			canPressUp = false;
+			if(World.level.getTile(tileX, tileY-1).equals(Tile.ROCK) ||
+					World.level.getTile(tileX, tileY-1).equals(Tile.LAVAROCK)) {
+				World.level.removeTile(tileX, tileY-1);
+				World.shake(0.2f);
+				canPressUp = false;
+			}
 		}
 		
 		//setReachableTiles();
 		
-		/*if(tileY == World.level.tileNumY-30) {
+		if(tileY == World.level.tileNumY-30) {
 			World.level.expand();
-		}*/
+		}
 		
 		World.cam.position.lerp(position, 0.05f);
 	}

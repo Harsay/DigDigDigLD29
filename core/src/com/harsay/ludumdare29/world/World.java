@@ -29,6 +29,7 @@ public class World {
 	
 	public World() {
 		cam.setToOrtho(true, MyGame.WIDTH, MyGame.HEIGHT);
+		cam.zoom = 0.7f;
 		level.generate();
 	}
 	
