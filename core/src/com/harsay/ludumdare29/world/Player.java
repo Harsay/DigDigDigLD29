@@ -25,6 +25,15 @@ public class Player extends Entity {
 	
 	public void update(float delta) {
 		super.update(delta);
+
+		
+		if(World.level.getTile(tileX, tileY).equals(Tile.LAVA)) {
+			System.out.println("DEAD");
+		}	
+		else if(World.level.getTile(tileX, tileY+1).equals(Tile.LAVA)) {
+			position.y += MyGame.UNIT;
+		}
+
 		
 		if(!Controller.isDownPressed) canPressDown = true;
 		if(!Controller.isLeftPressed) canPressLeft = true;
@@ -35,8 +44,7 @@ public class Player extends Entity {
 			if(World.level.getTile(tileX, tileY+1).equals(Tile.ROCK) ||
 					World.level.getTile(tileX, tileY+1).equals(Tile.LAVAROCK)) {
 				World.level.removeTile(tileX, tileY+1);
-				position.y = (tileY+1)*MyGame.UNIT;
-				position.x = (tileX)*MyGame.UNIT;
+				position.y += MyGame.UNIT;
 				canPressDown = false;
 				World.shake(0.2f);
 			}
@@ -47,8 +55,9 @@ public class Player extends Entity {
 				World.level.removeTile(tileX-1, tileY);
 				World.shake(0.2f);
 			}
-			position.y = (tileY)*MyGame.UNIT;
-			position.x = (tileX-1)*MyGame.UNIT;
+			if(!World.level.getTile(tileX-1, tileY).equals(Tile.INDESTRUCTIBLE)) {
+				position.x -= MyGame.UNIT;
+			}
 			canPressLeft = false;
 		}
 		else if(Controller.isRightPressed && canPressRight) {
@@ -57,8 +66,9 @@ public class Player extends Entity {
 				World.level.removeTile(tileX+1, tileY);
 				World.shake(0.2f);
 			}
-			position.y = (tileY)*MyGame.UNIT;
-			position.x = (tileX+1)*MyGame.UNIT;
+			if(!World.level.getTile(tileX+1, tileY).equals(Tile.INDESTRUCTIBLE)) {
+				position.x +=MyGame.UNIT;
+			}
 			canPressRight = false;
 		} 
 		else if(Controller.isUpPressed && canPressUp) {
@@ -72,7 +82,8 @@ public class Player extends Entity {
 		
 		//setReachableTiles();
 		
-		if(tileY == World.level.tileNumY-30) {
+		
+		if(tileY == World.level.tileNumY-9) {
 			World.level.expand();
 		}
 		

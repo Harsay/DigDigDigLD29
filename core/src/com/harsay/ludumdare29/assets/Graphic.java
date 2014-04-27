@@ -10,6 +10,7 @@ public class Graphic {
 	public static Sprite darkerTile;
 	public static Sprite lava;
 	public static Sprite lavaRock;
+	public static Sprite ind;
 	
 	public void init() {
 		tile = new Sprite(new Texture("tile.jpg"));
@@ -17,12 +18,14 @@ public class Graphic {
 		player = new Sprite(new Texture("player.jpg"));
 		lava = new Sprite(new Texture("lava.jpg"));
 		lavaRock = new Sprite(new Texture("lavaRock.jpg"));
+		ind = new Sprite(new Texture("ind.jpg"));
 		
 		tile.flip(false, true);
 		darkerTile.flip(false, true);
 		player.flip(false, true);
 		lava.flip(false, true);
 		lavaRock.flip(false, true);
+		ind.flip(false, true);
 	}
 
 }
