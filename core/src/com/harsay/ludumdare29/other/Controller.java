@@ -1,61 +1,32 @@
 package com.harsay.ludumdare29.other;
 
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.harsay.ludumdare29.MyGame;
-import com.harsay.ludumdare29.world.Level.Tile;
-import com.harsay.ludumdare29.world.Player;
-import com.harsay.ludumdare29.world.World;
 
 public class Controller extends InputAdapter {
 	
-	public static int mouseTileX;
-	public static int mouseTileY;
+	public static boolean isLeftPressed = false;
+	public static boolean isRightPressed = false;
+	public static boolean isDownPressed = false;
+	public static boolean isUpPressed = false;
 	
-	public static int mouseWorldTileX;
-	public static int mouseWorldTileY;
 	
-	public static Vector3 mousePosition = new Vector3(0,0,0);
-	public static Vector3 mouseWorldPosition = new Vector3(0,0,0);
-	
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		calculateCoordinates(screenX, screenY);
-		if(button == Input.Buttons.LEFT) {
-			World.level.checkTile();
-			return true;
-		} else {
-			World.cam.position.y += MyGame.UNIT;
-		}
-		return false;
+	public void checkInput() {
+		isLeftPressed = Gdx.input.isKeyPressed(Keys.LEFT);
+		isRightPressed = Gdx.input.isKeyPressed(Keys.RIGHT);
+		isDownPressed = Gdx.input.isKeyPressed(Keys.DOWN);
+		isUpPressed = Gdx.input.isKeyPressed(Keys.UP);
 	}
-
-	public boolean mouseMoved(int screenX, int screenY) {
-		calculateCoordinates(screenX, screenY);
+	
+	public boolean keyDown(int keycode) {
+		checkInput();
 		return false;
 	}
 	
-	public void calculateCoordinates(int screenX, int screenY) {
-		mousePosition.x = screenX;
-		mousePosition.y = screenY;
-
-		World.cam.unproject(mousePosition);
-		
-		mouseTileX = (int) Math.floor(mousePosition.x/MyGame.UNIT);
-		mouseTileY = (int) Math.floor(mousePosition.y/MyGame.UNIT);
+	public boolean keyUp(int keycode) {
+		checkInput();
+		return false;
 	}
 	
-	public static void drawCursor(ShapeRenderer sr) {
-		if(Player.reachableTiles.contains(new Vector2(mouseTileX, mouseTileY))) {
-			sr.setColor(Color.GREEN);
-		} else if(World.level.getTile(mouseTileX, mouseTileY).equals(Tile.NOTHING) && Player.tileY <= mouseTileY && Player.tileX != mouseTileX) {
-			sr.setColor(Color.YELLOW);
-		} else {
-			sr.setColor(Color.RED);
-		}
-		sr.rect(mouseTileX*MyGame.UNIT, mouseTileY*MyGame.UNIT, MyGame.UNIT, MyGame.UNIT);
-	}
 }

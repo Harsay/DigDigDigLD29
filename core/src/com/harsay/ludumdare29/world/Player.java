@@ -7,49 +7,66 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.harsay.ludumdare29.MyGame;
 import com.harsay.ludumdare29.assets.Graphic;
+import com.harsay.ludumdare29.other.Controller;
 import com.harsay.ludumdare29.world.Level.Tile;
 
 public class Player extends Entity {
 	
 	public static List<Vector2> reachableTiles = new ArrayList<Vector2>();
 	
-	public static boolean walkRight = false;
-	public static boolean walkLeft = false;
-	public static boolean isWalking = false;
-	public static int reachTileX = 0;
+	public boolean canPressDown = true;
+	public boolean canPressLeft = true;
+	public boolean canPressRight = true;
+	public boolean canPressUp = true;
 
 	public Player() {
-		super(15*MyGame.UNIT, 9*MyGame.UNIT, (int) Graphic.player.getWidth()/MyGame.UNIT, (int) Graphic.player.getHeight()/MyGame.UNIT);
+		super(45*MyGame.UNIT, 10*MyGame.UNIT, (int) Graphic.player.getWidth()/MyGame.UNIT, (int) Graphic.player.getHeight()/MyGame.UNIT);
 	}
 	
 	public void update(float delta) {
 		super.update(delta);
 		
-		if(World.level.getTile(tileX, tileY+height).equals(Tile.NOTHING)) {
-			velocity.y += speed*delta;
-		} else {
-			velocity.y = 0;
-		}
+		if(!Controller.isDownPressed) canPressDown = true;
+		if(!Controller.isLeftPressed) canPressLeft = true;
+		if(!Controller.isRightPressed) canPressRight = true;
+		if(!Controller.isUpPressed) canPressUp = true;
 		
-		if(isWalking) {
-			if(walkRight) velocity.x += speed*delta;
-			else if(walkLeft) velocity.x -= speed*delta;
-			if(walkRight && position.x >= reachTileX*MyGame.UNIT) {
-				isWalking = false;
-				walkRight = false;
-				velocity.x = 0;
-				position.x = reachTileX*MyGame.UNIT;
-			} else if(walkLeft && position.x <= reachTileX*MyGame.UNIT) {
-				isWalking = false;
-				walkLeft = false;
-				velocity.x = 0;
+		if(Controller.isDownPressed && canPressDown) {
+			World.level.removeTile(tileX, tileY+1);
+			position.y = (tileY+1)*MyGame.UNIT;
+			position.x = (tileX)*MyGame.UNIT;
+			canPressDown = false;
+			World.shake(0.2f);
+		}
+		else if(Controller.isLeftPressed && canPressLeft) {
+			if(!World.level.getTile(tileX-1, tileY).equals(Tile.NOTHING)) {
+				World.level.removeTile(tileX-1, tileY);
+				World.shake(0.2f);
 			}
+			position.y = (tileY)*MyGame.UNIT;
+			position.x = (tileX-1)*MyGame.UNIT;
+			canPressLeft = false;
 		}
-				
-		position.y += velocity.y;
-		position.x += velocity.x;
+		else if(Controller.isRightPressed && canPressRight) {
+			if(!World.level.getTile(tileX+1, tileY).equals(Tile.NOTHING)) {
+				World.level.removeTile(tileX+1, tileY);
+				World.shake(0.2f);
+			}
+			position.y = (tileY)*MyGame.UNIT;
+			position.x = (tileX+1)*MyGame.UNIT;
+			canPressRight = false;
+		} 
+		else if(Controller.isUpPressed && canPressUp) {
+			World.level.removeTile(tileX, tileY-1);
+			World.shake(0.2f);
+			canPressUp = false;
+		}
 		
-		setReachableTiles();
+		//setReachableTiles();
+		
+		/*if(tileY == World.level.tileNumY-30) {
+			World.level.expand();
+		}*/
 		
 		World.cam.position.lerp(position, 0.05f);
 	}
@@ -59,14 +76,6 @@ public class Player extends Entity {
 	}
 	
 	public void setReachableTiles() {
-		/*
-		 * tileY+height
-		 * tileY-1
-		 * tileX+1
-		 * tileX-1
-		 * tileX+1 tileY+1
-		 * tileX-1 tileY+1
-		 */
 		
 		reachableTiles.clear();
 		Level lvl = World.level;

@@ -25,8 +25,8 @@ public class Entity {
 	}
 	
 	public void update(float delta) {
-		tileX = (int) (position.x/MyGame.UNIT);
-		tileY = (int) (position.y/MyGame.UNIT);
+		tileX = (int) Math.floor(position.x/MyGame.UNIT);
+		tileY = (int) Math.floor(position.y/MyGame.UNIT);
 		//System.out.println(tileX+","+tileY);
 		
 	}
