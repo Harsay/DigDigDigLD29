@@ -20,14 +20,16 @@ public class Level {
 	public List<ArrayList<Tile>> map = new ArrayList<ArrayList<Tile>>();
 	
 	public int tileNumY = 0;
-	public int fixNumY = 12;
-	public int lavaToGenerate = 10;
-	public int indToGenerate = 0;
+	public int fixNumY = 17;
+	public int lavaToGenerate = 25;
+	public int indToGenerate = 5;
 	public float indAppearChance = 0.20f;
 	public float lavaRockAppearChance = 1.00f;
 	
-	public Level() {
-		
+	MyGame game;
+	
+	public Level(MyGame game) {
+		this.game = game;
 	}
 	
 	public void generate() {
@@ -43,7 +45,7 @@ public class Level {
 					}
 				}	
 				else {
-					list.add(Tile.NOTHING);
+					list.add(Tile.BACKGROUND);
 				}	
 			}
 			map.add(list);
@@ -76,7 +78,7 @@ public class Level {
 		indToGenerate += 3;
 		indAppearChance += 0.10f;
 		if(indAppearChance > 1.0f) indAppearChance = 1.0f;
-		lavaRockAppearChance -= 0.03f;
+		lavaRockAppearChance -= 0.10f;
 		if(lavaRockAppearChance < 0) lavaRockAppearChance = 0;
 		
 		generateLava();
@@ -89,8 +91,11 @@ public class Level {
 			int genY = (tileNumY-100) + random.nextInt(78) + fixNumY;
 			int genEndX = genBeginX + random.nextInt(15) + 1;
 			
+			//check x to avoid crashes
+			if(genEndX > 90) genEndX = 90;
+			
 			for(int x=genBeginX; x<=genEndX; x++) {
-				if(Math.random() < indAppearChance) map.get(x).set(genY, Tile.INDESTRUCTIBLE);
+				/*if(Math.random() < indAppearChance)*/ map.get(x).set(genY, Tile.INDESTRUCTIBLE);
 			}
 		}
 	}
@@ -98,11 +103,15 @@ public class Level {
 	public void generateLava() {
 		// LAVA GENERATION
 		
-		for(int i=0; i<=lavaToGenerate + random.nextInt((int)Math.floor(lavaToGenerate/2)); i++) { // SHOULD DEPEND OF DIFFICULTY + random
-			int lavaBeginX = random.nextInt(75);
-			int lavaBeginY = (tileNumY-100) + random.nextInt(78) + fixNumY;
+		for(int i=0; i<=lavaToGenerate + random.nextInt((int)Math.floor(lavaToGenerate/2)); i++) { 
+			int lavaBeginX = random.nextInt(90);
+			int lavaBeginY = (tileNumY-100) + random.nextInt(100) + fixNumY;
 			int lavaEndX = lavaBeginX + random.nextInt(15) + 1;
 			int lavaEndY = lavaBeginY + random.nextInt(10) + 1;
+			
+			//check X to avoid crashes
+			if(lavaEndX > 90) lavaEndX = 90;
+			if(lavaEndY > tileNumY) lavaEndY = 100;
 			
 			for(int x=lavaBeginX; x<=lavaEndX; x++) {
 				for(int y=lavaBeginY; y<=lavaEndY; y++) {
@@ -166,6 +175,14 @@ public class Level {
 	
 	public int getHeight() {
 		return map.get(0).size()*MyGame.UNIT;
+	}
+
+	public int fallLava(int z) {
+		if(game.player.tileY - z > 10) z = game.player.tileY-10; 
+		System.out.println(z);
+		for(int x=0; x<=90; x++) map.get(x).set(z, Tile.LAVA);
+		
+		return z;
 	}
 
 }

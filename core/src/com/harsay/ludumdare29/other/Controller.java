@@ -10,6 +10,7 @@ public class Controller extends InputAdapter {
 	public static boolean isRightPressed = false;
 	public static boolean isDownPressed = false;
 	public static boolean isUpPressed = false;
+	public static boolean isEnterPressed = false;
 	
 	
 	public void checkInput() {
@@ -17,6 +18,7 @@ public class Controller extends InputAdapter {
 		isRightPressed = Gdx.input.isKeyPressed(Keys.RIGHT);
 		isDownPressed = Gdx.input.isKeyPressed(Keys.DOWN);
 		isUpPressed = Gdx.input.isKeyPressed(Keys.UP);
+		isEnterPressed = Gdx.input.isKeyPressed(Keys.ENTER);
 	}
 	
 	public boolean keyDown(int keycode) {

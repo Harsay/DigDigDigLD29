@@ -7,7 +7,6 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector3;
 import com.harsay.ludumdare29.MyGame;
 import com.harsay.ludumdare29.assets.Graphic;
 
@@ -19,7 +18,7 @@ public class World {
 	
 	public OrthographicCamera cam = new OrthographicCamera(MyGame.WIDTH, MyGame.HEIGHT);
 	
-	public Level level = new Level();
+	public Level level;
 	
 	public Random random = new Random();
 	
@@ -28,12 +27,16 @@ public class World {
 	public float shakeMaximumDuration = 300;
 	public boolean isShaking = false;
 	
+	public float lavaFallTime = 0;
+	public float lavaFallTimeMax = 0.5f;
+	public int lavaFalls = 0;
+	
 	MyGame game;
 	
 	public World(MyGame game) {
 		this.game = game;
+		level = new Level(game);
 		add(game.player);
-		System.out.println("l");
 		cam.setToOrtho(true, MyGame.WIDTH, MyGame.HEIGHT);
 		cam.zoom = 0.7f;
 		level.generate();
@@ -53,6 +56,18 @@ public class World {
 			Entity ent = entities.get(i);
 			ent.update(delta);
 		}
+		
+		if(!game.welcome) {
+			lavaFallTime += delta;
+			if(lavaFallTime >= lavaFallTimeMax) {
+				lavaFalls = level.fallLava(lavaFalls) + 1;
+				lavaFallTime = 0;
+			}
+		}
+		
+		lavaFallTimeMax = (float) (0.5f - (0.05f * (Math.floor(game.score / 30)))); 
+		if(lavaFallTimeMax < 0.15f) lavaFallTimeMax = 0.15f;
+	
 	}
 	
 	public void render() {
@@ -65,9 +80,13 @@ public class World {
 			Entity ent = entities.get(i);
 			ent.render(sb);
 		}
-		Vector3 pos = new Vector3(0, 32, 0);
-		cam.unproject(pos);
-		Graphic.font.draw(sb, "Score: 0", pos.x, pos.y);
+		
+		Graphic.worldFont.setScale(2, -2);
+		Graphic.worldFont.draw(sb, "DIG! DIG! DIG!", 45*MyGame.UNIT-260, 10*MyGame.UNIT-150);
+		Graphic.worldFont.setScale(0.4f, -0.4f);
+		Graphic.worldFont.draw(sb, "Press down arrow to start digging!", 45*MyGame.UNIT-150, 10*MyGame.UNIT-50);
+
+		
 		sb.end();
 
 	}
