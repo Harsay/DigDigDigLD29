@@ -179,9 +179,7 @@ public class Level {
 
 	public int fallLava(int z) {
 		if(game.player.tileY - z > 10) z = game.player.tileY-10; 
-		System.out.println(z);
 		for(int x=0; x<=90; x++) map.get(x).set(z, Tile.LAVA);
-		
 		return z;
 	}
 

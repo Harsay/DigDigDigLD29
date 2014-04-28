@@ -22,6 +22,8 @@ public class Player extends Entity {
 	public boolean canPressRight = true;
 	public boolean canPressUp = true;
 	
+	public boolean goesLeft = true;
+	
 	public boolean isAlive = true;
 	
 	public int moveCounter = 0;
@@ -29,7 +31,7 @@ public class Player extends Entity {
 	Random random = new Random();
 
 	public Player(MyGame game) {
-		super(game, 45*MyGame.UNIT, 10*MyGame.UNIT, (int) Graphic.player.getWidth()/MyGame.UNIT, (int) Graphic.player.getHeight()/MyGame.UNIT);
+		super(game, 45*MyGame.UNIT, 10*MyGame.UNIT, (int) Graphic.playerLeft.getWidth()/MyGame.UNIT, (int) Graphic.playerLeft.getHeight()/MyGame.UNIT);
 	}
 	
 	public void update(float delta) {
@@ -83,6 +85,7 @@ public class Player extends Entity {
 				position.x -= MyGame.UNIT;
 				moveCounter += 1;
 			} 
+			goesLeft = true;
 			canPressLeft = false;
 		}
 		else if(Controller.isRightPressed && canPressRight && !game.welcome) {
@@ -96,6 +99,7 @@ public class Player extends Entity {
 				position.x +=MyGame.UNIT;
 				moveCounter += 1;
 			} 
+			goesLeft = false;
 			canPressRight = false;
 		} 
 		else if(Controller.isUpPressed && canPressUp && !game.welcome) {
@@ -167,8 +171,13 @@ public class Player extends Entity {
 	}
 	
 	public void render(SpriteBatch sb) {
-		Graphic.player.setPosition(position.x, position.y);
-		Graphic.player.draw(sb);
+		if(goesLeft) {
+			Graphic.playerLeft.setPosition(position.x, position.y);
+			Graphic.playerLeft.draw(sb);			
+		} else {
+			Graphic.playerRight.setPosition(position.x, position.y);
+			Graphic.playerRight.draw(sb);
+		}
 	}
 
 }

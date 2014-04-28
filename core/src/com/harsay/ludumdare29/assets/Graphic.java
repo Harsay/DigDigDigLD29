@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Graphic {
 	
 	public static Sprite tile;
-	public static Sprite player;
+	public static Sprite playerLeft;
+	public static Sprite playerRight;
 	public static Sprite darkerTile;
 	public static Sprite lava;
 	public static Sprite lavaRock;
@@ -20,14 +21,16 @@ public class Graphic {
 	public void init() {
 		tile = new Sprite(new Texture("tile.jpg"));
 		darkerTile = new Sprite(new Texture("darkerTile.jpg"));
-		player = new Sprite(new Texture("player.jpg"));
+		playerLeft = new Sprite(new Texture("player.png"));
+		playerRight = new Sprite(new Texture("player.png"));
 		lava = new Sprite(new Texture("lava.jpg"));
 		lavaRock = new Sprite(new Texture("lavaRock.jpg"));
 		ind = new Sprite(new Texture("ind.jpg"));
 		
 		tile.flip(false, true);
 		darkerTile.flip(false, true);
-		player.flip(false, true);
+		playerLeft.flip(false, true);
+		playerRight.flip(true, true);
 		lava.flip(false, true);
 		lavaRock.flip(false, true);
 		ind.flip(false, true);
