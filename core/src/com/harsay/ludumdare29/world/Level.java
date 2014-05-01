@@ -117,7 +117,6 @@ public class Level {
 			
 			for(int x=lavaBeginX; x<=lavaEndX; x++) {
 				for(int y=lavaBeginY; y<=lavaEndY; y++) {
-					System.out.println(map.get(x).size()+"|"+y);
 					if(!getTile(x, y).equals(Tile.INDESTRUCTIBLE)) map.get(x).set(y, Tile.LAVA);
 				}
 			}
@@ -136,7 +135,6 @@ public class Level {
 	}
 	
 	public void render(SpriteBatch sb) {
-		int elements = map.size() * map.get(0).size();
 		for(int x=0; x<map.size(); x++) {
 			for(int y=0; y<map.get(x).size(); y++) {
 				Tile t = map.get(x).get(y);
@@ -162,7 +160,6 @@ public class Level {
 				}
 			}
 		}
-		System.out.println("Map size: "+elements);
 	}
 	
 	
