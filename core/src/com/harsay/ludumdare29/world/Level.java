@@ -21,10 +21,12 @@ public class Level {
 	
 	public int tileNumY = 0;
 	public int fixNumY = 17;
-	public int lavaToGenerate = 25;
-	public int indToGenerate = 5;
-	public float indAppearChance = 0.20f;
+	public int lavaToGenerate = 5;
+	public int indToGenerate = 1;
+	public float indAppearChance = 0.13f;
 	public float lavaRockAppearChance = 1.00f;
+	
+	public int lavaCount = 0;
 	
 	MyGame game;
 	
@@ -35,7 +37,7 @@ public class Level {
 	public void generate() {
 		for(int x=0; x<=90; x++) {
 			ArrayList<Tile> list = new ArrayList<Tile>();
-			for(int y=0; y<=100; y++) {
+			for(int y=0; y<=50; y++) {
 				if(y > 10) {
 					if(x > 0 && x < 90) {
 						list.add(Tile.ROCK);
@@ -61,10 +63,10 @@ public class Level {
 	}
 	
 	public void expand() {
-		fixNumY = 0;
+		fixNumY = 20;
 		for(int x=0; x<=90; x++) {
 			ArrayList<Tile> list = map.get(x);
-			for(int y=0; y<=100; y++) {
+			for(int y=0; y<=game.player.moveCounter; y++) {
 				if(x > 0 && x < 90) {
 					list.add(Tile.ROCK);
 				}
@@ -73,9 +75,9 @@ public class Level {
 				}
 			}
 		}
-		tileNumY += 100;
-		lavaToGenerate += 5;
-		indToGenerate += 3;
+		//tileNumY += 100;
+		lavaToGenerate += 1;
+		indToGenerate += 1;
 		indAppearChance += 0.10f;
 		if(indAppearChance > 1.0f) indAppearChance = 1.0f;
 		lavaRockAppearChance -= 0.10f;
@@ -88,7 +90,7 @@ public class Level {
 	public void generateIndestructible() {
 		for(int i=0; i<=indToGenerate; i++) { 
 			int genBeginX = random.nextInt(75);
-			int genY = (tileNumY-100) + random.nextInt(78) + fixNumY;
+			int genY = /*(tileNumY-100) +*/ random.nextInt(30) + fixNumY;
 			int genEndX = genBeginX + random.nextInt(15) + 1;
 			
 			//check x to avoid crashes
@@ -105,16 +107,17 @@ public class Level {
 		
 		for(int i=0; i<=lavaToGenerate + random.nextInt((int)Math.floor(lavaToGenerate/2)); i++) { 
 			int lavaBeginX = random.nextInt(90);
-			int lavaBeginY = (tileNumY-100) + random.nextInt(100) + fixNumY;
+			int lavaBeginY = /*(tileNumY-100) +*/ random.nextInt(20) + fixNumY;
 			int lavaEndX = lavaBeginX + random.nextInt(15) + 1;
-			int lavaEndY = lavaBeginY + random.nextInt(10) + 1;
+			int lavaEndY = lavaBeginY + random.nextInt(10) /*+1*/;
 			
 			//check X to avoid crashes
 			if(lavaEndX > 90) lavaEndX = 90;
-			if(lavaEndY > tileNumY) lavaEndY = 100;
+			if(lavaEndY >= map.get(0).size()) lavaEndY = map.get(0).size()-1;
 			
 			for(int x=lavaBeginX; x<=lavaEndX; x++) {
 				for(int y=lavaBeginY; y<=lavaEndY; y++) {
+					System.out.println(map.get(x).size()+"|"+y);
 					if(!getTile(x, y).equals(Tile.INDESTRUCTIBLE)) map.get(x).set(y, Tile.LAVA);
 				}
 			}
@@ -123,7 +126,7 @@ public class Level {
 				for(int y=lavaBeginY-1; y<=lavaEndY+1; y++) {
 					if( Math.random() < lavaRockAppearChance &&
 							x >= 0 && x <= 90 &&
-								y >= (tileNumY-100)+fixNumY && y <= tileNumY &&
+								y >= /*(tileNumY-100)+*/ fixNumY && y <= tileNumY &&
 								!getTile(x, y).equals(Tile.LAVA) &&
 								!getTile(x, y).equals(Tile.INDESTRUCTIBLE)) 
 						map.get(x).set(y, Tile.LAVAROCK);
@@ -133,6 +136,7 @@ public class Level {
 	}
 	
 	public void render(SpriteBatch sb) {
+		int elements = map.size() * map.get(0).size();
 		for(int x=0; x<map.size(); x++) {
 			for(int y=0; y<map.get(x).size(); y++) {
 				Tile t = map.get(x).get(y);
@@ -158,6 +162,7 @@ public class Level {
 				}
 			}
 		}
+		System.out.println("Map size: "+elements);
 	}
 	
 	
@@ -177,10 +182,16 @@ public class Level {
 		return map.get(0).size()*MyGame.UNIT;
 	}
 
-	public int fallLava(int z) {
-		if(game.player.tileY - z > 10) z = game.player.tileY-10; 
-		for(int x=0; x<=90; x++) map.get(x).set(z, Tile.LAVA);
-		return z;
+	public void fallLava() {
+		//if(game.player.tileY - z > 10) z = game.player.tileY-10; 
+		for(int x=0; x<=90; x++) map.get(x).set(lavaCount, Tile.LAVA);
+		lavaCount++;
+	}
+	
+	public void clearLine() {
+		for(int x=0; x<map.size(); x++) {
+			map.get(x).remove(0);
+		}
 	}
 
 }

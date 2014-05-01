@@ -98,14 +98,16 @@ public class GameScreen extends BasicScreen {
 				game.world.cam.rotate(endRotationSpeed*delta);
 			}
 			
+			float camSpeed = 0.6f*delta;	
+			
 			if(game.player.tileX <= 12) {
-				game.world.cam.position.lerp(new Vector3(12*game.UNIT, game.player.position.y, 0), 0.01f);
+				game.world.cam.position.lerp(new Vector3(12*game.UNIT, game.player.position.y, 0), camSpeed);
 			} 
 			else if(game.player.tileX >= 79) {
-				game.world.cam.position.lerp(new Vector3(79*game.UNIT, game.player.position.y, 0), 0.01f);
+				game.world.cam.position.lerp(new Vector3(79*game.UNIT, game.player.position.y, 0), camSpeed);
 			}
 			else {
-				game.world.cam.position.lerp(game.player.position, 0.01f);
+				game.world.cam.position.lerp(game.player.position, camSpeed);
 			}
 			
 			

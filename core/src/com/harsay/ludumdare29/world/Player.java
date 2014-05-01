@@ -27,6 +27,7 @@ public class Player extends Entity {
 	public boolean isAlive = true;
 	
 	public int moveCounter = 0;
+	public int moveCounterAll = 0;
 	
 	Random random = new Random();
 
@@ -39,20 +40,11 @@ public class Player extends Entity {
 
 		if(!isAlive) return;
 
-		switch(moveCounter) {
+		switch(moveCounterAll) {
 			case 5: game.showHint(0); break;
 			case 30: game.showHint(1); break;
 			case 60: game.showHint(2); break;
 			case 90: game.showHint(3); break;
-		}
-		
-		
-		if(game.world.level.getTile(tileX, tileY).equals(Tile.LAVA)) {
-			isAlive = false;
-			playDeath();
-		}	
-		else if(game.world.level.getTile(tileX, tileY+1).equals(Tile.LAVA)) {
-			position.y += MyGame.UNIT;
 		}
 
 		
@@ -65,14 +57,21 @@ public class Player extends Entity {
 			if(game.world.level.getTile(tileX, tileY+1).equals(Tile.ROCK) ||
 					game.world.level.getTile(tileX, tileY+1).equals(Tile.LAVAROCK)) {
 				game.world.level.removeTile(tileX, tileY+1);
-				position.y += MyGame.UNIT;
+				game.world.level.clearLine();
+				//position.y += MyGame.UNIT;
 				canPressDown = false;
 				game.world.shake(0.2f);
 				game.score += 1;
 				moveCounter += 1;
+				moveCounterAll += 1;
+				game.world.welcomeTextFix += 1;
+				if(game.world.level.lavaCount > 0) game.world.level.lavaCount--;  
 				playSound();
 			}
-			game.welcome = false;
+			if(game.welcome) {
+				game.welcome = false;
+				game.world.level.fallLava();
+			}
 		}
 		else if(Controller.isLeftPressed && canPressLeft && !game.welcome) {
 			if(game.world.level.getTile(tileX-1, tileY).equals(Tile.ROCK) ||
@@ -83,7 +82,7 @@ public class Player extends Entity {
 			}
 			if(!game.world.level.getTile(tileX-1, tileY).equals(Tile.INDESTRUCTIBLE)) {
 				position.x -= MyGame.UNIT;
-				moveCounter += 1;
+				moveCounterAll += 1;
 			} 
 			goesLeft = true;
 			canPressLeft = false;
@@ -97,7 +96,7 @@ public class Player extends Entity {
 			}
 			if(!game.world.level.getTile(tileX+1, tileY).equals(Tile.INDESTRUCTIBLE)) {
 				position.x +=MyGame.UNIT;
-				moveCounter += 1;
+				moveCounterAll += 1;
 			} 
 			goesLeft = false;
 			canPressRight = false;
@@ -114,19 +113,29 @@ public class Player extends Entity {
 		
 		//setReachableTiles();
 		
+		float camSpeed = game.welcome ? 3.0f*delta : 10.0f*delta;	
 		
-		if(tileY == game.world.level.tileNumY-9) {
+		if(moveCounter == 30) {
 			game.world.level.expand();
+			moveCounter = 0;
 		}
 		
 		if(tileX <= 12) {
-			game.world.cam.position.lerp(new Vector3(12*game.UNIT, position.y, 0), 0.05f);
+			game.world.cam.position.lerp(new Vector3(12*game.UNIT, position.y, 0), camSpeed);
 		} 
 		else if(tileX >= 79) {
-			game.world.cam.position.lerp(new Vector3(79*game.UNIT, position.y, 0), 0.05f);
+			game.world.cam.position.lerp(new Vector3(79*game.UNIT, position.y, 0), camSpeed);
 		}
 		else {
-			game.world.cam.position.lerp(position, 0.05f);
+			game.world.cam.position.lerp(position, camSpeed);
+		}
+		
+		if(game.world.level.getTile(tileX, tileY).equals(Tile.LAVA)) {
+			isAlive = false;
+			playDeath();
+		}	
+		else if(game.world.level.getTile(tileX, tileY+1).equals(Tile.LAVA)) {
+			position.y += MyGame.UNIT;
 		}
 		
 	}

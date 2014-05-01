@@ -28,8 +28,10 @@ public class World {
 	public boolean isShaking = false;
 	
 	public float lavaFallTime = 0;
-	public float lavaFallTimeMax = 0.5f;
+	public float lavaFallTimeMax = 0.3f;
 	public int lavaFalls = 0;
+	
+	public int welcomeTextFix = 0;
 	
 	MyGame game;
 	
@@ -57,15 +59,15 @@ public class World {
 			ent.update(delta);
 		}
 		
-		if(!game.welcome) {
+		if(game.player.isAlive && !game.welcome) {
 			lavaFallTime += delta;
 			if(lavaFallTime >= lavaFallTimeMax) {
-				lavaFalls = level.fallLava(lavaFalls) + 1;
+				level.fallLava();
 				lavaFallTime = 0;
 			}
 		}
 		
-		lavaFallTimeMax = (float) (0.5f - (0.05f * (Math.floor(game.score / 30)))); 
+		lavaFallTimeMax = (float) (0.3f - (0.05f * (Math.floor(game.score / 30)))); 
 		if(lavaFallTimeMax < 0.15f) lavaFallTimeMax = 0.15f;
 	
 	}
@@ -81,10 +83,12 @@ public class World {
 			ent.render(sb);
 		}
 		
+		int fix = welcomeTextFix*MyGame.UNIT;
+		
 		Graphic.worldFont.setScale(2, -2);
-		Graphic.worldFont.draw(sb, "DIG! DIG! DIG!", 45*MyGame.UNIT-260, 10*MyGame.UNIT-150);
+		Graphic.worldFont.draw(sb, "DIG! DIG! DIG!", 45*MyGame.UNIT-260, 10*MyGame.UNIT-150-fix);
 		Graphic.worldFont.setScale(0.4f, -0.4f);
-		Graphic.worldFont.draw(sb, "Press down arrow to start digging!", 45*MyGame.UNIT-150, 10*MyGame.UNIT-50);
+		Graphic.worldFont.draw(sb, "Press down arrow to start digging!", 45*MyGame.UNIT-150, 10*MyGame.UNIT-50-fix);
 
 		
 		sb.end();
